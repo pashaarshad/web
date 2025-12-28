@@ -1,0 +1,404 @@
+.page {
+    padding: 40px 0;
+    min-height: 80vh;
+}
+
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header {
+    margin-bottom: 32px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: var(--text-secondary);
+}
+
+/* Search & Filters Bar */
+.filtersBar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.searchBox {
+    flex: 1;
+    min-width: 280px;
+    display: flex;
+    align-items: center;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 0 16px;
+    transition: all var(--transition-fast);
+}
+
+.searchBox:focus-within {
+    border-color: var(--primary);
+}
+
+.searchIcon {
+    color: var(--text-muted);
+    font-size: 18px;
+    margin-right: 12px;
+}
+
+.searchBox input {
+    flex: 1;
+    padding: 14px 0;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-size: 15px;
+}
+
+.filterButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.filterSelect {
+    padding: 12px 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+    outline: none;
+}
+
+.filterSelect:focus {
+    border-color: var(--primary);
+}
+
+.filterBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-primary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+    border-color: var(--primary);
+}
+
+/* Active Filters */
+.activeFilters {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+}
+
+.filterTag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
+    background: rgba(255, 87, 34, 0.1);
+    color: var(--primary);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.filterTag button {
+    background: none;
+    border: none;
+    color: var(--primary);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+}
+
+/* Cuisine Tags */
+.cuisineTags {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 10px;
+}
+
+.cuisineTag {
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.cuisineTag:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.cuisineTag.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Filter Panel */
+.filterPanel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    padding: 24px;
+    margin-bottom: 32px;
+}
+
+.filterGroup h4 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+}
+
+.ratingOptions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.ratingBtn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    color: var(--text-secondary);
+    font-size: 14px;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.ratingBtn:hover,
+.ratingBtn.active {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(255, 193, 7, 0.1);
+}
+
+/* Grid */
+.grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+}
+
+/* Restaurant Card */
+.restaurantCard {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all var(--transition-base);
+}
+
+.restaurantCard:hover {
+    transform: translateY(-6px);
+    border-color: rgba(255, 87, 34, 0.3);
+    box-shadow: var(--shadow-lg);
+}
+
+.restaurantImage {
+    position: relative;
+    height: 180px;
+    background: var(--bg-secondary);
+}
+
+.imagePlaceholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 56px;
+    background: linear-gradient(135deg, var(--bg-secondary), var(--bg-card));
+}
+
+.openBadge,
+.closedBadge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.openBadge {
+    background: rgba(76, 175, 80, 0.9);
+    color: white;
+}
+
+.closedBadge {
+    background: rgba(255, 68, 68, 0.9);
+    color: white;
+}
+
+.ratingBadge {
+    position: absolute;
+    bottom: 12px;
+    right: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 6px 12px;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+}
+
+.restaurantInfo {
+    padding: 20px;
+}
+
+.restaurantInfo h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.cuisineText {
+    color: var(--text-secondary);
+    font-size: 14px;
+    margin-bottom: 16px;
+}
+
+.meta {
+    display: flex;
+    gap: 20px;
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+.meta span {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* No Results */
+.noResults {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 80px 20px;
+}
+
+.noResultsIcon {
+    font-size: 64px;
+    display: block;
+    margin-bottom: 24px;
+}
+
+.noResults h3 {
+    font-size: 24px;
+    margin-bottom: 12px;
+}
+
+.noResults p {
+    color: var(--text-secondary);
+}
+
+/* Skeleton */
+.skeletonCard {
+    background: var(--bg-card);
+    border-radius: var(--border-radius-lg);
+    overflow: hidden;
+}
+
+.skeletonImage {
+    height: 180px;
+    background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+.skeletonContent {
+    padding: 20px;
+}
+
+.skeletonTitle {
+    height: 20px;
+    width: 70%;
+    background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+.skeletonText {
+    height: 14px;
+    width: 50%;
+    background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: 4px;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .filtersBar {
+        flex-direction: column;
+    }
+
+    .searchBox {
+        width: 100%;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+}
