@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FiSearch, FiStar, FiClock, FiArrowRight, FiTruck } from 'react-icons/fi';
 import { restaurantAPI } from '@/services/api';
+import LocationBar from '@/components/common/LocationBar';
 import styles from './page.module.css';
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
   const [cuisines, setCuisines] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(true);
+  const [recipeImages, setRecipeImages] = useState([]);
 
   useEffect(() => {
     fetchData();
@@ -19,11 +21,25 @@ export default function Home() {
 
   const fetchData = async () => {
     try {
+      // Fetch recipe images from DummyJSON
+      const recipesRes = await fetch('https://dummyjson.com/recipes?limit=10&select=image,name');
+      const recipesData = await recipesRes.json();
+      const images = recipesData.recipes?.map(r => r.image) || [];
+      setRecipeImages(images);
+
       const [restaurantsRes, cuisinesRes] = await Promise.all([
         restaurantAPI.getAll({ limit: 8 }),
         restaurantAPI.getCuisines(),
       ]);
-      setRestaurants(restaurantsRes.data.data.restaurants || []);
+
+      // Assign recipe images to restaurants
+      const restaurantData = restaurantsRes.data.data.restaurants || [];
+      const restaurantsWithImages = restaurantData.map((r, idx) => ({
+        ...r,
+        image: images[idx % images.length] || null
+      }));
+
+      setRestaurants(restaurantsWithImages);
       setCuisines(cuisinesRes.data.data.cuisines || []);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -66,20 +82,20 @@ export default function Home() {
             Order from the best restaurants near you. Fresh food, quick delivery, amazing taste.
           </p>
 
-          {/* Search Bar */}
+          {/* Location & Search Bar */}
           <div className={styles.searchContainer}>
-            <div className={styles.searchBox}>
-              <FiSearch className={styles.searchIcon} />
-              <input
-                type="text"
-                placeholder="Search for restaurants or dishes..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={styles.searchInput}
-              />
-              <Link href={`/restaurants?search=${searchQuery}`} className={styles.searchBtn}>
-                Search
-              </Link>
+            <div className={styles.locationSearchBar}>
+              <LocationBar />
+              <div className={styles.searchBox}>
+                <FiSearch className={styles.searchIcon} />
+                <input
+                  type="text"
+                  placeholder="Search for restaurant, item or more"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className={styles.searchInput}
+                />
+              </div>
             </div>
           </div>
 
@@ -158,9 +174,13 @@ export default function Home() {
                   className={styles.restaurantCard}
                 >
                   <div className={styles.restaurantImage}>
-                    <div className={styles.restaurantImagePlaceholder}>
-                      <span>🍽️</span>
-                    </div>
+                    {restaurant.image ? (
+                      <img src={restaurant.image} alt={restaurant.name} className={styles.restaurantImg} />
+                    ) : (
+                      <div className={styles.restaurantImagePlaceholder}>
+                        <span>🍽️</span>
+                      </div>
+                    )}
                     {restaurant.isOpen ? (
                       <span className={styles.openBadge}>Open</span>
                     ) : (

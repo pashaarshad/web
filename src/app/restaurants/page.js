@@ -40,6 +40,11 @@ export default function RestaurantsPage() {
     const fetchRestaurants = async () => {
         setLoading(true);
         try {
+            // Fetch recipe images from DummyJSON
+            const recipesRes = await fetch('https://dummyjson.com/recipes?limit=10&select=image,name');
+            const recipesData = await recipesRes.json();
+            const images = recipesData.recipes?.map(r => r.image) || [];
+
             const params = {};
             if (filters.search) params.search = filters.search;
             if (filters.cuisine) params.cuisine = filters.cuisine;
@@ -47,7 +52,15 @@ export default function RestaurantsPage() {
             if (filters.rating) params.rating = filters.rating;
 
             const response = await restaurantAPI.getAll(params);
-            setRestaurants(response.data.data.restaurants || []);
+            const restaurantData = response.data.data.restaurants || [];
+
+            // Assign recipe images to restaurants
+            const restaurantsWithImages = restaurantData.map((r, idx) => ({
+                ...r,
+                image: images[idx % images.length] || null
+            }));
+
+            setRestaurants(restaurantsWithImages);
         } catch (error) {
             setRestaurants(getDemoRestaurants());
         }
@@ -195,9 +208,13 @@ export default function RestaurantsPage() {
                                 className={styles.restaurantCard}
                             >
                                 <div className={styles.restaurantImage}>
-                                    <div className={styles.imagePlaceholder}>
-                                        <span>🍽️</span>
-                                    </div>
+                                    {restaurant.image ? (
+                                        <img src={restaurant.image} alt={restaurant.name} className={styles.restaurantImg} />
+                                    ) : (
+                                        <div className={styles.imagePlaceholder}>
+                                            <span>🍽️</span>
+                                        </div>
+                                    )}
                                     {restaurant.isOpen ? (
                                         <span className={styles.openBadge}>Open</span>
                                     ) : (

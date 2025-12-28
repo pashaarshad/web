@@ -248,8 +248,34 @@
     background: rgba(255, 68, 68, 0.1);
 }
 
-/* Login Button */
+/* Auth Buttons */
+.authButtons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
 .loginBtn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    text-decoration: none;
+    border-radius: 30px;
+    font-weight: 500;
+    font-size: 14px;
+    transition: all var(--transition-base);
+}
+
+.loginBtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.registerBtn {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -263,7 +289,7 @@
     transition: all var(--transition-base);
 }
 
-.loginBtn:hover {
+.registerBtn:hover {
     box-shadow: var(--shadow-glow);
     transform: translateY(-2px);
 }

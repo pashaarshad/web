@@ -1,0 +1,273 @@
+.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 60vh;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 3px solid var(--border-color);
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.page {
+    padding: 40px 0 80px;
+    min-height: 80vh;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header {
+    margin-bottom: 32px;
+}
+
+.header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.header p {
+    color: var(--text-secondary);
+}
+
+/* Filters */
+.filters {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+}
+
+.filterBtn {
+    padding: 10px 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 30px;
+    color: var(--text-secondary);
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.filterBtn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: white;
+}
+
+/* Orders List */
+.ordersList {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Order Card */
+.orderCard {
+    display: block;
+    padding: 20px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius-lg);
+    text-decoration: none;
+    color: var(--text-primary);
+    transition: all var(--transition-base);
+}
+
+.orderCard:hover {
+    border-color: rgba(255, 87, 34, 0.3);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.restaurantInfo {
+    display: flex;
+    gap: 12px;
+}
+
+.restaurantLogo {
+    width: 48px;
+    height: 48px;
+    background: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.restaurantInfo h3 {
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.orderNumber {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.statusBadge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.statusBadge[data-status="pending"] {
+    background: rgba(255, 152, 0, 0.2);
+    color: #ff9800;
+}
+
+.statusBadge[data-status="confirmed"],
+.statusBadge[data-status="preparing"] {
+    background: rgba(156, 39, 176, 0.2);
+    color: #9c27b0;
+}
+
+.statusBadge[data-status="ready"],
+.statusBadge[data-status="picked_up"] {
+    background: rgba(0, 188, 212, 0.2);
+    color: #00bcd4;
+}
+
+.statusBadge[data-status="on_the_way"] {
+    background: rgba(139, 195, 74, 0.2);
+    color: #8bc34a;
+}
+
+.statusBadge[data-status="delivered"] {
+    background: rgba(76, 175, 80, 0.2);
+    color: #4caf50;
+}
+
+.statusBadge[data-status="cancelled"] {
+    background: rgba(244, 67, 54, 0.2);
+    color: #f44336;
+}
+
+.orderItems {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin-bottom: 16px;
+}
+
+.orderFooter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.orderMeta {
+    display: flex;
+    gap: 20px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.orderDate {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.orderTotal {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.chevron {
+    color: var(--text-muted);
+    font-size: 20px;
+}
+
+/* Empty State */
+.emptyState {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 80px 20px;
+    text-align: center;
+}
+
+.emptyIcon {
+    font-size: 64px;
+    margin-bottom: 20px;
+}
+
+.emptyState h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+}
+
+.emptyState p {
+    color: var(--text-secondary);
+    margin-bottom: 24px;
+}
+
+.orderBtn {
+    padding: 12px 32px;
+    background: var(--gradient-primary);
+    color: white;
+    text-decoration: none;
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    transition: all var(--transition-base);
+}
+
+.orderBtn:hover {
+    box-shadow: var(--shadow-glow);
+}
+
+/* Skeleton */
+.skeletonCard {
+    height: 140px;
+    background: linear-gradient(90deg, var(--bg-card) 25%, var(--bg-card-hover) 50%, var(--bg-card) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+    border-radius: var(--border-radius-lg);
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}

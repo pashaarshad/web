@@ -108,10 +108,14 @@ export default function Navbar() {
                             )}
                         </div>
                     ) : (
-                        <Link href="/login" className={styles.loginBtn}>
-                            <FiUser />
-                            <span>Login</span>
-                        </Link>
+                        <div className={styles.authButtons}>
+                            <Link href="/login" className={styles.loginBtn}>
+                                Login
+                            </Link>
+                            <Link href="/register" className={styles.registerBtn}>
+                                Register
+                            </Link>
+                        </div>
                     )}
 
                     {/* Mobile Menu Toggle */}
