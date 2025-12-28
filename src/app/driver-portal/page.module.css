@@ -1,0 +1,608 @@
+/* Driver Portal Layout */
+.page {
+    min-height: 100vh;
+    background: #f4f5f7;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #eee;
+    border-top-color: #2196f3;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Header */
+.header {
+    background: linear-gradient(135deg, #1a237e, #3949ab);
+    color: white;
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.headerLeft {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.logo {
+    font-size: 36px;
+}
+
+.header h1 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 2px;
+}
+
+.header p {
+    font-size: 14px;
+    opacity: 0.8;
+}
+
+.onlineToggle {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.onlineStatus {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.onlineStatus.online {
+    background: rgba(76, 175, 80, 0.2);
+    color: #a5d6a7;
+}
+
+.onlineStatus.offline {
+    background: rgba(244, 67, 54, 0.2);
+    color: #ef9a9a;
+}
+
+.toggleBtn {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    font-size: 32px;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+}
+
+.toggleBtn.active {
+    color: #4caf50;
+}
+
+/* Main Content */
+.main {
+    padding: 24px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Stats Grid */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+}
+
+.statCard {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.statIcon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+}
+
+.statInfo {
+    display: flex;
+    flex-direction: column;
+}
+
+.statValue {
+    font-size: 22px;
+    font-weight: 700;
+    color: #222;
+}
+
+.statLabel {
+    font-size: 12px;
+    color: #888;
+    margin-top: 2px;
+}
+
+/* Active Order Section */
+.activeOrder {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.activeOrder h2 {
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: #222;
+}
+
+.activeOrderCard {
+    /* Container */
+}
+
+/* Progress Steps */
+.orderProgress {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    padding: 0 20px;
+}
+
+.progressStep {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: #999;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.stepDot {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: #eee;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+}
+
+.progressStep.active .stepDot {
+    background: #2196f3;
+    color: white;
+}
+
+.progressStep.done .stepDot {
+    background: #4caf50;
+    color: white;
+}
+
+.progressStep.active,
+.progressStep.done {
+    color: #333;
+}
+
+.progressLine {
+    flex: 1;
+    height: 3px;
+    background: #eee;
+    margin: 0 8px;
+    margin-bottom: 24px;
+}
+
+/* Location Cards */
+.orderDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.locationCard {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 16px;
+    background: #fafafa;
+    border-radius: 12px;
+    border: 1px solid #eee;
+}
+
+.locationIcon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.locationInfo {
+    flex: 1;
+}
+
+.locationType {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.locationInfo h4 {
+    font-size: 16px;
+    color: #222;
+    margin: 4px 0;
+}
+
+.locationInfo p {
+    font-size: 13px;
+    color: #666;
+}
+
+.phoneLink {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    color: #2196f3;
+    font-size: 13px;
+    text-decoration: none;
+}
+
+.phoneLink:hover {
+    text-decoration: underline;
+}
+
+.navBtn {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    background: #e3f2fd;
+    border: none;
+    color: #2196f3;
+    font-size: 20px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.navBtn:hover {
+    background: #bbdefb;
+}
+
+.earningBadge {
+    text-align: center;
+    padding: 12px;
+    background: #fff8e1;
+    border-radius: 8px;
+    color: #ff8f00;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.earningBadge strong {
+    font-weight: 700;
+}
+
+/* Action Buttons */
+.actionButtons {
+    display: flex;
+    gap: 12px;
+}
+
+.primaryBtn {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 16px;
+    background: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.primaryBtn:hover {
+    background: #1976d2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(33, 150, 243, 0.3);
+}
+
+.primaryBtn.success {
+    background: #4caf50;
+}
+
+.primaryBtn.success:hover {
+    background: #43a047;
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Available Orders */
+.availableOrders {
+    margin-bottom: 24px;
+}
+
+.availableOrders h2 {
+    font-size: 18px;
+    color: #222;
+    margin-bottom: 16px;
+}
+
+.ordersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+}
+
+.orderCard {
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.orderHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+
+.orderNumber {
+    font-weight: 700;
+    color: #222;
+}
+
+.earnBadge {
+    background: #e8f5e9;
+    color: #2e7d32;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* Route Info */
+.routeInfo {
+    position: relative;
+    padding-left: 20px;
+    margin-bottom: 16px;
+}
+
+.routePoint {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+}
+
+.routePoint:last-child {
+    margin-bottom: 0;
+}
+
+.pickupIcon {
+    color: #2196f3;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.dropIcon {
+    color: #4caf50;
+    font-size: 20px;
+    flex-shrink: 0;
+}
+
+.routeLabel {
+    font-size: 11px;
+    font-weight: 700;
+    color: #888;
+    text-transform: uppercase;
+}
+
+.routePoint p {
+    font-size: 14px;
+    color: #222;
+    margin: 2px 0;
+}
+
+.distance {
+    font-size: 12px;
+    color: #666;
+}
+
+.routeLine {
+    position: absolute;
+    left: 29px;
+    top: 28px;
+    bottom: 48px;
+    width: 2px;
+    background: #ddd;
+}
+
+.orderMeta {
+    padding: 12px 0;
+    border-top: 1px dashed #eee;
+    font-size: 13px;
+    color: #666;
+    margin-bottom: 16px;
+}
+
+.acceptBtn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #4caf50, #66bb6a);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.acceptBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+}
+
+/* Empty & Offline States */
+.emptyState,
+.offlineState {
+    text-align: center;
+    padding: 60px 20px;
+    background: white;
+    border-radius: 16px;
+}
+
+.emptyState span,
+.offlineIcon {
+    font-size: 48px;
+    display: block;
+    margin-bottom: 16px;
+}
+
+.emptyState p,
+.offlineState p {
+    color: #666;
+    font-size: 15px;
+}
+
+.offlineState h2 {
+    color: #333;
+    margin-bottom: 8px;
+}
+
+.goOnlineBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 20px;
+    padding: 14px 28px;
+    background: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.goOnlineBtn:hover {
+    background: #43a047;
+}
+
+/* Quick Links */
+.quickLinks {
+    display: flex;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+.quickLink {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px;
+    background: white;
+    border-radius: 12px;
+    color: #333;
+    text-decoration: none;
+    font-weight: 500;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    transition: all 0.2s;
+}
+
+.quickLink:hover {
+    background: #f5f5f5;
+    color: #2196f3;
+}
+
+.quickLink svg {
+    font-size: 20px;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .statsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .ordersGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .quickLinks {
+        flex-wrap: wrap;
+    }
+
+    .quickLink {
+        flex: 1 1 calc(50% - 8px);
+    }
+}
+
+@media (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+    }
+
+    .headerLeft {
+        flex-direction: column;
+    }
+
+    .statsGrid {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .orderProgress {
+        padding: 0;
+    }
+
+    .progressStep span:last-child {
+        display: none;
+    }
+}

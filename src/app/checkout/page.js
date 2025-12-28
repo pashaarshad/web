@@ -1,34 +1,105 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { useRouter } from 'next/navigation';
 import { FiMapPin, FiCreditCard, FiCheck, FiPlus, FiClock, FiHome, FiBriefcase, FiX, FiArrowLeft, FiNavigation } from 'react-icons/fi';
-import { GoogleMap, useJsApiLoader, Marker } from '@react-google-maps/api';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { orderAPI, userAPI } from '@/services/api';
 import styles from './page.module.css';
 
-const mapContainerStyle = {
-    width: '100%',
-    height: '250px',
-    borderRadius: '12px',
-};
+// Leaflet Imports (Dynamic import to avoid SSR issues)
+import dynamic from 'next/dynamic';
+import 'leaflet/dist/leaflet.css';
+
+// Dynamically import Leaflet components
+const MapContainer = dynamic(() => import('react-leaflet').then(mod => mod.MapContainer), { ssr: false });
+const TileLayer = dynamic(() => import('react-leaflet').then(mod => mod.TileLayer), { ssr: false });
+const Marker = dynamic(() => import('react-leaflet').then(mod => mod.Marker), { ssr: false });
+const useMap = dynamic(() => import('react-leaflet').then(mod => mod.useMap), { ssr: false });
+const useMapEvents = dynamic(() => import('react-leaflet').then(mod => mod.useMapEvents), { ssr: false });
 
 const defaultCenter = {
     lat: 12.9716,
     lng: 77.5946,
 };
 
-const mapOptions = {
-    disableDefaultUI: true,
-    zoomControl: true,
-    streetViewControl: false,
-    mapTypeControl: false,
-    fullscreenControl: false,
+// Fix Leaflet marker icon issue
+const MarkerIcon = () => {
+    // Only run on client side
+    if (typeof window !== 'undefined') {
+        const L = require('leaflet');
+        return new L.Icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            iconRetinaUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png',
+            shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+        });
+    }
+    return null;
 };
 
-const libraries = ['places'];
+// Component to handle map view updates
+function ChangeView({ center }) {
+    const map = useMap();
+    useEffect(() => {
+        if (map && center && typeof map.flyTo === 'function') {
+            map.flyTo(center, 16);
+        } else if (map && center && typeof map.setView === 'function') {
+            map.setView(center, 16);
+        }
+    }, [center, map]);
+    return null;
+}
+
+// Component for draggable marker
+function DraggableMarker({ position, setPosition, onDragEnd }) {
+    const markerRef = useRef(null);
+
+    const eventHandlers = useMemo(
+        () => ({
+            dragend() {
+                const marker = markerRef.current;
+                if (marker != null) {
+                    const newPos = marker.getLatLng();
+                    setPosition(newPos);
+                    onDragEnd(newPos);
+                }
+            },
+        }),
+        [onDragEnd, setPosition],
+    );
+
+    // Fix for Leaflet default icon not showing
+    const [icon, setIcon] = useState(null);
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            const L = require('leaflet');
+            // Fix for default marker icon
+            delete L.Icon.Default.prototype._getIconUrl;
+            L.Icon.Default.mergeOptions({
+                iconRetinaUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png',
+                iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+                shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+            });
+            setIcon(true);
+        }
+    }, []);
+
+    if (!icon) return null;
+
+    return (
+        <Marker
+            draggable={true}
+            eventHandlers={eventHandlers}
+            position={position}
+            ref={markerRef}
+        />
+    );
+}
 
 export default function CheckoutPage() {
     const router = useRouter();
@@ -47,7 +118,7 @@ export default function CheckoutPage() {
     const [locationLoading, setLocationLoading] = useState(false);
     const [markerPosition, setMarkerPosition] = useState(defaultCenter);
     const [mapCenter, setMapCenter] = useState(defaultCenter);
-    const mapRef = useRef(null);
+
     const [newAddress, setNewAddress] = useState({
         street: '',
         city: '',
@@ -56,12 +127,6 @@ export default function CheckoutPage() {
         doorFlat: '',
         landmark: '',
         label: 'home',
-    });
-
-    // Load Google Maps
-    const { isLoaded, loadError } = useJsApiLoader({
-        googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || '',
-        libraries,
     });
 
     useEffect(() => {
@@ -122,19 +187,9 @@ export default function CheckoutPage() {
     };
 
     // Handle marker drag end
-    const handleMarkerDragEnd = useCallback((e) => {
-        const lat = e.latLng.lat();
-        const lng = e.latLng.lng();
-        setMarkerPosition({ lat, lng });
-        reverseGeocode(lat, lng);
-    }, []);
-
-    // Handle map click to move marker
-    const handleMapClick = useCallback((e) => {
-        const lat = e.latLng.lat();
-        const lng = e.latLng.lng();
-        setMarkerPosition({ lat, lng });
-        reverseGeocode(lat, lng);
+    const handleMarkerDragEnd = useCallback((newPos) => {
+        setMarkerPosition(newPos);
+        reverseGeocode(newPos.lat, newPos.lng);
     }, []);
 
     // Get current location
@@ -151,14 +206,7 @@ export default function CheckoutPage() {
                 const newPos = { lat: latitude, lng: longitude };
                 setMarkerPosition(newPos);
                 setMapCenter(newPos);
-
-                if (mapRef.current) {
-                    mapRef.current.panTo(newPos);
-                }
-
-                if (isLoaded && window.google) {
-                    reverseGeocode(latitude, longitude);
-                }
+                reverseGeocode(latitude, longitude);
                 setLocationLoading(false);
             },
             (error) => {
@@ -229,10 +277,6 @@ export default function CheckoutPage() {
         setLoading(false);
     };
 
-    const onMapLoad = useCallback((map) => {
-        mapRef.current = map;
-    }, []);
-
     const subtotal = getCartTotal();
     const deliveryFee = cart.restaurant?.deliveryFee || 40;
     const tax = Math.round(subtotal * 0.05);
@@ -249,13 +293,12 @@ export default function CheckoutPage() {
             const address = addresses.find(a => a._id === selectedAddress);
 
             const orderData = {
-                restaurant: cart.restaurant?._id || 'demo-restaurant',
+                restaurantId: cart.restaurant?._id || 'demo-restaurant',
                 items: cart.items.map(item => ({
-                    menuItem: item.menuItem?._id || item._id,
-                    name: item.name,
+                    menuItemId: item.menuItem?._id || item._id,
                     quantity: item.quantity,
-                    price: item.price,
                     customizations: item.customizations || [],
+                    // specialInstructions: '', // Add if needed
                 })),
                 deliveryAddress: {
                     label: address?.label || 'home',
@@ -264,6 +307,7 @@ export default function CheckoutPage() {
                     state: address?.state || 'Karnataka',
                     pincode: address?.pincode || '560001',
                     phone: address?.phone || user?.phone || '',
+                    location: address?.location // Pass full location object including coordinates
                 },
                 paymentMethod: paymentMethod,
             };
@@ -509,7 +553,7 @@ export default function CheckoutPage() {
                 </div>
             </div>
 
-            {/* Add Address Modal with Google Maps */}
+            {/* Add Address Modal with Leaflet Map */}
             {showAddressModal && (
                 <>
                     <div className={styles.modalOverlay} onClick={() => setShowAddressModal(false)} />
@@ -522,47 +566,26 @@ export default function CheckoutPage() {
                         </div>
 
                         <div className={styles.modalContent}>
-                            {/* Google Map */}
+                            {/* Leaflet Map */}
                             <div className={styles.mapContainer}>
-                                {loadError && (
-                                    <div className={styles.mapError}>Error loading map</div>
-                                )}
-                                {!isLoaded && (
-                                    <div className={styles.mapLoading}>
-                                        <div className={styles.mapSpinner}></div>
-                                        <span>Loading map...</span>
-                                    </div>
-                                )}
-                                {isLoaded && (
-                                    <>
-                                        <div className={styles.dragMapHint}>Drag map</div>
-                                        <GoogleMap
-                                            mapContainerStyle={mapContainerStyle}
-                                            center={mapCenter}
-                                            zoom={16}
-                                            options={mapOptions}
-                                            onLoad={onMapLoad}
-                                            onClick={handleMapClick}
-                                        >
-                                            <Marker
-                                                position={markerPosition}
-                                                draggable={true}
-                                                onDragEnd={handleMarkerDragEnd}
-                                                icon={{
-                                                    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                                                    scaledSize: new window.google.maps.Size(40, 40),
-                                                }}
-                                            />
-                                        </GoogleMap>
-                                        <button
-                                            className={styles.locateMeBtn}
-                                            onClick={getCurrentLocation}
-                                            disabled={locationLoading}
-                                        >
-                                            <FiNavigation />
-                                        </button>
-                                    </>
-                                )}
+                                <div className={styles.dragMapHint}>Drag pin to adjust</div>
+                                <MapContainer
+                                    center={mapCenter}
+                                    zoom={16}
+                                    style={{ height: '100%', width: '100%' }}
+                                    scrollWheelZoom={false}
+                                >
+                                    <TileLayer
+                                        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                                    />
+                                    <ChangeView center={mapCenter} />
+                                    <DraggableMarker
+                                        position={markerPosition}
+                                        setPosition={setMarkerPosition}
+                                        onDragEnd={handleMarkerDragEnd}
+                                    />
+                                </MapContainer>
                             </div>
 
                             {/* Use Current Location Button */}
@@ -570,6 +593,7 @@ export default function CheckoutPage() {
                                 className={styles.locationBtn}
                                 onClick={getCurrentLocation}
                                 disabled={locationLoading}
+
                             >
                                 <FiNavigation />
                                 {locationLoading ? 'Getting location...' : 'Use Current Location'}

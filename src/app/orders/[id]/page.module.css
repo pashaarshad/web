@@ -1,0 +1,396 @@
+/* Page Layout */
+.page {
+    min-height: calc(100vh - var(--nav-height));
+    background: #f4f5f7;
+    padding: 30px 0;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    color: #333;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 24px;
+    transition: all 0.2s;
+    text-decoration: none;
+}
+
+.backBtn:hover {
+    border-color: var(--primary);
+    color: var(--primary);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 60vh;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #eee;
+    border-top-color: var(--primary);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Header Section */
+.heroSection {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin-bottom: 24px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+
+.headerTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.restaurantInfo h1 {
+    font-size: 24px;
+    color: #222;
+    margin-bottom: 4px;
+}
+
+.restaurantAddress {
+    font-size: 14px;
+    color: #666;
+}
+
+.orderMeta {
+    text-align: right;
+}
+
+.orderStatus {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    text-transform: capitalize;
+}
+
+/* Status Colors */
+.status_placed {
+    background: #fff3e0;
+    color: #ef6c00;
+}
+
+.status_confirmed {
+    background: #e3f2fd;
+    color: #1976d2;
+}
+
+.status_preparing {
+    background: #f3e5f5;
+    color: #7b1fa2;
+}
+
+.status_ready {
+    background: #e0f2f1;
+    color: #00897b;
+}
+
+.status_on_the_way {
+    background: #ffecb3;
+    color: #ff8f00;
+}
+
+.status_delivered {
+    background: #e8f5e9;
+    color: #2e7d32;
+}
+
+.status_cancelled {
+    background: #ffebee;
+    color: #c62828;
+}
+
+.orderId {
+    font-size: 13px;
+    color: #888;
+}
+
+/* Tracking Bar */
+.tracker {
+    margin: 40px 0 20px;
+    position: relative;
+    padding: 0 20px;
+}
+
+.progressBar {
+    position: absolute;
+    top: 24px;
+    /* Align with circle center */
+    left: 40px;
+    right: 40px;
+    height: 4px;
+    background: #eee;
+    border-radius: 2px;
+    z-index: 1;
+}
+
+.progressFill {
+    height: 100%;
+    background: var(--primary);
+    /* Green or Brand Color */
+    border-radius: 2px;
+    transition: width 1s ease-in-out;
+}
+
+.steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 80px;
+}
+
+.stepIcon {
+    width: 48px;
+    height: 48px;
+    background: white;
+    border: 2px solid #eee;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    color: #ccc;
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+}
+
+.step.active .stepIcon {
+    background: var(--primary);
+    /* Checkpoint reached */
+    border-color: var(--primary);
+    color: white;
+    box-shadow: 0 4px 10px rgba(255, 87, 34, 0.3);
+}
+
+.step.current .stepIcon {
+    transform: scale(1.15);
+    /* Pulse effect for current step */
+}
+
+.stepLabel {
+    font-size: 12px;
+    font-weight: 600;
+    color: #999;
+}
+
+.step.active .stepLabel {
+    color: #333;
+}
+
+.stepTime {
+    font-size: 11px;
+    color: #666;
+    margin-top: 4px;
+}
+
+/* Content Grid */
+.grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 24px;
+}
+
+/* Items Card */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+    height: fit-content;
+}
+
+.cardHeader {
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.itemRow {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px dashed #eee;
+}
+
+.veg {
+    color: #43a047;
+    font-size: 12px;
+    border: 1px solid #43a047;
+    padding: 2px;
+    height: 16px;
+}
+
+.nonveg {
+    color: #e53935;
+    font-size: 12px;
+    border: 1px solid #e53935;
+    padding: 2px;
+    height: 16px;
+}
+
+.itemDetails {
+    flex: 1;
+}
+
+.itemName {
+    font-size: 15px;
+    color: #333;
+    font-weight: 500;
+}
+
+.itemMeta {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 4px;
+    font-size: 13px;
+    color: #666;
+}
+
+.billRow {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #666;
+}
+
+.totalRow {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    font-size: 18px;
+    font-weight: 700;
+    color: #222;
+}
+
+/* Delivery Details */
+.deliveryDetails {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.detailGroup {
+    display: flex;
+    gap: 16px;
+}
+
+.detailIcon {
+    width: 40px;
+    height: 40px;
+    background: #f5f5f5;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.detailInfo h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.detailInfo p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
+/* Map Preview */
+.mapPreview {
+    height: 200px;
+    background: #eee;
+    border-radius: 12px;
+    margin-top: 10px;
+    overflow: hidden;
+    position: relative;
+    border: 1px solid #e0e0e0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .headerTop {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .orderMeta {
+        text-align: left;
+    }
+
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tracker {
+        padding: 0;
+    }
+
+    .stepLabel {
+        display: none;
+        /* Hide labels on mobile to save space */
+    }
+
+    .step.active .stepLabel,
+    .step.current .stepLabel {
+        display: block;
+        /* Show only active label */
+        font-size: 10px;
+    }
+}

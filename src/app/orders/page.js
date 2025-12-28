@@ -31,7 +31,11 @@ export default function OrdersPage() {
         setLoading(true);
         try {
             const params = {};
-            if (filter !== 'all') params.status = filter;
+            if (filter === 'active') {
+                params.status = 'pending,confirmed,preparing,ready,picked_up,on_the_way';
+            } else if (filter !== 'all') {
+                params.status = filter;
+            }
             const response = await orderAPI.getMyOrders(params);
             setOrders(response.data.data.orders || []);
         } catch (error) {
@@ -107,7 +111,7 @@ export default function OrdersPage() {
                 <div className={styles.filters}>
                     {[
                         { value: 'all', label: 'All Orders' },
-                        { value: 'on_the_way', label: 'Active' },
+                        { value: 'active', label: 'Active' },
                         { value: 'delivered', label: 'Completed' },
                         { value: 'cancelled', label: 'Cancelled' },
                     ].map((tab) => (
