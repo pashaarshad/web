@@ -53,6 +53,18 @@ export default function RestaurantPortal() {
             if (response.data.success) {
                 setOrders(response.data.data.orders);
             }
+
+            // Fetch stats too
+            const statsRes = await orderAPI.getRestaurantStats();
+            if (statsRes.data.success) {
+                setStats(prev => ({
+                    ...prev,
+                    todayRevenue: statsRes.data.data.todayRevenue,
+                    todayOrders: statsRes.data.data.todayOrders,
+                    activeOrders: statsRes.data.data.activeOrders,
+                    totalOrders: statsRes.data.data.totalOrders
+                }));
+            }
         } catch (error) {
             console.error('Error fetching orders:', error);
         } finally {
@@ -149,18 +161,36 @@ export default function RestaurantPortal() {
                     </div>
                 </header>
 
-                {/* Stats Cards - Placeholder for now as API doesn't return aggregated stats yet */}
                 <div className={styles.statsGrid}>
                     <div className={styles.statCard}>
                         <div className={styles.statIcon} style={{ background: 'rgba(255, 87, 34, 0.1)', color: '#ff5722' }}>
                             <FiPackage />
                         </div>
                         <div className={styles.statInfo}>
-                            <span className={styles.statValue}>{orders.length}</span>
+                            <span className={styles.statValue}>{stats.activeOrders || 0}</span>
                             <span className={styles.statLabel}>Active Orders</span>
                         </div>
                     </div>
-                    {/* ... other stats ... */}
+
+                    <Link href="/restaurant-portal/earnings" className={styles.statCard} style={{ textDecoration: 'none', color: 'inherit' }}>
+                        <div className={styles.statIcon} style={{ background: 'rgba(76, 175, 80, 0.1)', color: '#4caf50' }}>
+                            <FiDollarSign />
+                        </div>
+                        <div className={styles.statInfo}>
+                            <span className={styles.statValue}>₹{stats.todayRevenue || 0}</span>
+                            <span className={styles.statLabel}>Today's Revenue</span>
+                        </div>
+                    </Link>
+
+                    <div className={styles.statCard}>
+                        <div className={styles.statIcon} style={{ background: 'rgba(33, 150, 243, 0.1)', color: '#2196f3' }}>
+                            <FiTrendingUp />
+                        </div>
+                        <div className={styles.statInfo}>
+                            <span className={styles.statValue}>{stats.todayOrders || 0}</span>
+                            <span className={styles.statLabel}>Total Orders</span>
+                        </div>
+                    </div>
                 </div>
 
                 {/* Live Orders Section */}

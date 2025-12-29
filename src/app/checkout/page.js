@@ -288,6 +288,12 @@ export default function CheckoutPage() {
             return;
         }
 
+        if (paymentMethod !== 'cod') {
+            // Simulate Payment Processing
+            const confirmed = window.confirm('Proceed to Pay ₹' + total + '? (Demo Mode)');
+            if (!confirmed) return;
+        }
+
         setLoading(true);
         try {
             const address = addresses.find(a => a._id === selectedAddress);
@@ -298,7 +304,6 @@ export default function CheckoutPage() {
                     menuItemId: item.menuItem?._id || item._id,
                     quantity: item.quantity,
                     customizations: item.customizations || [],
-                    // specialInstructions: '', // Add if needed
                 })),
                 deliveryAddress: {
                     label: address?.label || 'home',
@@ -307,7 +312,7 @@ export default function CheckoutPage() {
                     state: address?.state || 'Karnataka',
                     pincode: address?.pincode || '560001',
                     phone: address?.phone || user?.phone || '',
-                    location: address?.location // Pass full location object including coordinates
+                    location: address?.location
                 },
                 paymentMethod: paymentMethod,
             };
@@ -321,10 +326,12 @@ export default function CheckoutPage() {
             }
         } catch (error) {
             console.error('Order error:', error);
-            // Demo mode - simulate success
-            setOrderId('demo-order-' + Date.now());
-            setOrderPlaced(true);
-            clearCart();
+            // Fallback for Demo Mode if API fails (e.g. backend issue)
+            setTimeout(() => {
+                setOrderId('demo-' + Date.now().toString().slice(-6));
+                setOrderPlaced(true);
+                clearCart();
+            }, 1500);
         }
         setLoading(false);
     };

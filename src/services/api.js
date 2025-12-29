@@ -99,10 +99,11 @@ export const orderAPI = {
 
     // Restaurant specific
     getRestaurantOrders: (params) => api.get('/orders/restaurant/orders', { params }),
+    getRestaurantStats: () => api.get('/orders/restaurant/stats'),
     updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
 
-    // Driver specific (using available endpoints or placeholders)
-    getDriverOrders: () => api.get('/orders/driver/orders'), // Pending backend implementation
-    getAvailableOrders: (params) => api.get('/orders/available', { params }), // Pending backend implementation
-    acceptOrder: (id) => api.post(`/orders/${id}/accept`), // Pending backend implementation
+    // Driver specific
+    getDriverOrders: (params) => api.get('/orders/driver/orders', { params }),
+    getAvailableOrders: (params) => api.get('/orders/driver/available', { params }),
+    acceptOrder: (id) => api.post(`/orders/${id}/accept`),
 };

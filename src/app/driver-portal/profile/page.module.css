@@ -1,0 +1,231 @@
+.page {
+    min-height: 100vh;
+    background: #f5f5f5;
+    padding-bottom: 2rem;
+}
+
+.header {
+    background: #fff;
+    padding: 1.5rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+.backBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.header h1 {
+    font-size: 1.5rem;
+    color: #333;
+}
+
+.main {
+    padding: 1.5rem;
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.profileCard {
+    background: #fff;
+    border-radius: 16px;
+    padding: 2rem;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    margin-bottom: 2rem;
+}
+
+.avatarSection {
+    margin-bottom: 2rem;
+}
+
+.avatar {
+    width: 80px;
+    height: 80px;
+    background: #3f51b5;
+    color: #fff;
+    font-size: 2rem;
+    font-weight: 700;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.avatarSection h2 {
+    font-size: 1.5rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.roleBadge {
+    background: #e3f2fd;
+    color: #1565c0;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.infoGrid {
+    display: grid;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 12px;
+}
+
+.icon {
+    font-size: 1.5rem;
+    color: #666;
+}
+
+.infoItem label {
+    display: block;
+    font-size: 0.8rem;
+    color: #888;
+    margin-bottom: 0.2rem;
+}
+
+.infoItem p {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    margin: 0;
+}
+
+.section {
+    margin-bottom: 2rem;
+}
+
+.section h3 {
+    font-size: 1.1rem;
+    color: #555;
+    margin-bottom: 1rem;
+    padding-left: 0.5rem;
+}
+
+.vehicleCard {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.vehicleIcon {
+    width: 50px;
+    height: 50px;
+    background: #e0f2f1;
+    color: #009688;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.vehicleInfo h4 {
+    margin: 0;
+    color: #333;
+}
+
+.vehicleInfo p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0;
+}
+
+.verifiedBadge {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: #4caf50;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.docList {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.docItem {
+    padding: 1rem 1.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.docItem:last-child {
+    border-bottom: none;
+}
+
+.docItem span {
+    color: #333;
+}
+
+.docStatus {
+    color: #4caf50;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.logoutBtn {
+    width: 100%;
+    padding: 1rem;
+    background: #ffebee;
+    color: #d32f2f;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.logoutBtn:hover {
+    background: #ffcdd2;
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: #f5f5f5;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #ddd;
+    border-top-color: #3f51b5;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
