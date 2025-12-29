@@ -3,9 +3,10 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiTruck, FiShoppingBag } from 'react-icons/fi';
+import { FiMail, FiLock, FiEye, FiEyeOff, FiUser, FiTruck, FiShoppingBag, FiPhone } from 'react-icons/fi';
 import { FcGoogle } from 'react-icons/fc';
 import { useAuth } from '@/context/AuthContext';
+import PhoneLogin from '@/components/auth/PhoneLogin';
 import styles from './page.module.css';
 
 const roleConfig = {
@@ -46,6 +47,7 @@ export default function LoginPage() {
     const [showPassword, setShowPassword] = useState(false);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
+    const [showPhoneLogin, setShowPhoneLogin] = useState(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -193,6 +195,7 @@ export default function LoginPage() {
                                         placeholder="Enter your email"
                                         value={formData.email}
                                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                                        autoComplete="email"
                                         required
                                     />
                                 </div>
@@ -207,6 +210,7 @@ export default function LoginPage() {
                                         placeholder="Enter your password"
                                         value={formData.password}
                                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                                        autoComplete="current-password"
                                         required
                                     />
                                     <button
@@ -254,10 +258,28 @@ export default function LoginPage() {
                                     <span>or continue with</span>
                                 </div>
 
-                                <button className={styles.googleBtn} onClick={handleGoogleLogin}>
-                                    <FcGoogle />
-                                    <span>Continue with Google</span>
-                                </button>
+                                {showPhoneLogin ? (
+                                    <PhoneLogin
+                                        onSuccess={(user) => {
+                                            console.log('Phone login success:', user);
+                                            // For now, redirect to home
+                                            // In production, sync with backend
+                                            router.push('/');
+                                        }}
+                                        onBack={() => setShowPhoneLogin(false)}
+                                    />
+                                ) : (
+                                    <div className={styles.socialButtons}>
+                                        <button className={styles.googleBtn} onClick={handleGoogleLogin}>
+                                            <FcGoogle />
+                                            <span>Continue with Google</span>
+                                        </button>
+                                        <button className={styles.phoneBtn} onClick={() => setShowPhoneLogin(true)}>
+                                            <FiPhone />
+                                            <span>Continue with Phone</span>
+                                        </button>
+                                    </div>
+                                )}
                             </>
                         )}
 

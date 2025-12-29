@@ -300,6 +300,40 @@
     font-size: 24px;
 }
 
+/* Social Buttons Container */
+.socialButtons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.phoneBtn {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    padding: 14px;
+    background: #4CAF50;
+    border: none;
+    border-radius: var(--border-radius);
+    color: white;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+}
+
+.phoneBtn:hover {
+    background: #43a047;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+}
+
+.phoneBtn svg {
+    font-size: 20px;
+}
+
 /* Role Selection Tabs */
 .roleTabs {
     display: flex;

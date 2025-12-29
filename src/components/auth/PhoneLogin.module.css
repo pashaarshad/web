@@ -1,0 +1,219 @@
+.container {
+    width: 100%;
+}
+
+.phoneStep,
+.otpStep,
+.verifyingStep {
+    text-align: center;
+}
+
+.iconWrapper {
+    width: 60px;
+    height: 60px;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, #4CAF50, #43a047);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: #fff;
+}
+
+.phoneStep h3,
+.otpStep h3,
+.verifyingStep h3 {
+    font-size: 1.25rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.phoneStep p,
+.otpStep p,
+.verifyingStep p {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+}
+
+.phoneInput {
+    display: flex;
+    align-items: center;
+    background: #f5f5f5;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    transition: border-color 0.2s;
+}
+
+.phoneInput:focus-within {
+    border-color: #4CAF50;
+}
+
+.countryCode {
+    padding: 0.875rem 1rem;
+    background: #e8e8e8;
+    font-weight: 600;
+    color: #333;
+    border-right: 1px solid #ddd;
+}
+
+.phoneInput input {
+    flex: 1;
+    padding: 0.875rem 1rem;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+}
+
+.phoneInput input::placeholder {
+    color: #999;
+}
+
+.otpInputs {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.otpInputs input {
+    width: 48px;
+    height: 56px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 600;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    background: #f5f5f5;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.otpInputs input:focus {
+    border-color: #4CAF50;
+    background: #fff;
+}
+
+.otpInputs input:not(:placeholder-shown) {
+    border-color: #4CAF50;
+    background: #e8f5e9;
+}
+
+.error {
+    background: #ffebee;
+    color: #c62828;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+}
+
+.submitBtn {
+    width: 100%;
+    padding: 0.875rem;
+    background: linear-gradient(135deg, #4CAF50, #43a047);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    transition: all 0.2s;
+}
+
+.submitBtn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+}
+
+.submitBtn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.backBtn {
+    width: 100%;
+    padding: 0.75rem;
+    margin-top: 0.75rem;
+    background: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.backBtn:hover {
+    background: #f5f5f5;
+    color: #333;
+}
+
+.resendRow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.resendBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    background: transparent;
+    border: none;
+    color: #4CAF50;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.resendBtn:disabled {
+    color: #999;
+    cursor: not-allowed;
+}
+
+.changeNum {
+    margin-top: 1rem;
+    background: transparent;
+    border: none;
+    color: #666;
+    font-size: 0.85rem;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.changeNum:hover {
+    color: #333;
+}
+
+.verifyingStep {
+    padding: 2rem;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #e0e0e0;
+    border-top-color: #4CAF50;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1.5rem;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
