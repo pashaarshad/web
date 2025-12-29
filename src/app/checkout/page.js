@@ -329,12 +329,64 @@ export default function CheckoutPage() {
             if (response.data.success) {
                 const { order, payment } = response.data.data;
 
-                // Online Payment - Show Custom QR Modal
-                if (paymentMethod === 'online') {
+                // Online Payment - Use Razorpay Checkout (Auto-Verified)
+                if (paymentMethod === 'online' && payment && payment.razorpayKeyId) {
+                    const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
+                    if (!res) {
+                        alert('Payment gateway failed to load');
+                        setLoading(false);
+                        return;
+                    }
+
+                    const options = {
+                        key: payment.razorpayKeyId,
+                        amount: payment.amount,
+                        currency: payment.currency,
+                        name: "Fooddala",
+                        description: "Order #" + order.orderNumber,
+                        order_id: payment.razorpayOrderId,
+                        handler: async function (response) {
+                            try {
+                                await orderAPI.verifyPayment(order._id, {
+                                    razorpayPaymentId: response.razorpay_payment_id,
+                                    razorpaySignature: response.razorpay_signature
+                                });
+                                setOrderId(order._id);
+                                setOrderDetails(order);
+                                setOrderPlaced(true);
+                                clearCart();
+                            } catch (err) {
+                                console.error(err);
+                                alert('Payment verification failed');
+                            }
+                        },
+                        prefill: {
+                            name: user?.name,
+                            email: user?.email,
+                            contact: user?.phone
+                        },
+                        theme: { color: "#ff4757" },
+                        config: {
+                            display: {
+                                blocks: {
+                                    upi: {
+                                        name: "Pay using UPI",
+                                        instruments: [{ method: "upi" }]
+                                    }
+                                },
+                                sequence: ["block.upi"],
+                                preferences: { show_default_blocks: true }
+                            }
+                        }
+                    };
+                    const paymentObject = new window.Razorpay(options);
+                    paymentObject.open();
+                }
+                // Online but no Razorpay - Show QR Modal
+                else if (paymentMethod === 'online') {
                     setOrderId(order._id);
                     setOrderDetails(order);
                     setShowPaymentModal(true);
-                    setLoading(false);
                 }
                 // COD - Direct Success
                 else {
@@ -346,21 +398,21 @@ export default function CheckoutPage() {
             }
         } catch (error) {
             console.error('Order error:', error);
-            // Fallback - Create demo order and show QR if online
-            const fallbackOrder = {
-                _id: 'demo-' + Date.now().toString().slice(-6),
-                orderNumber: 'FD-' + Date.now().toString().slice(-6),
-                total: total,
-                createdAt: new Date()
-            };
-            setOrderId(fallbackOrder._id);
-            setOrderDetails(fallbackOrder);
+            const errorMsg = error.response?.data?.message || 'Order failed';
 
+            // Show QR modal for online payment fallback
             if (paymentMethod === 'online') {
+                const fallbackOrder = {
+                    _id: 'demo-' + Date.now().toString().slice(-6),
+                    orderNumber: 'FD-' + Date.now().toString().slice(-6),
+                    total: total,
+                    createdAt: new Date()
+                };
+                setOrderId(fallbackOrder._id);
+                setOrderDetails(fallbackOrder);
                 setShowPaymentModal(true);
             } else {
-                setOrderPlaced(true);
-                clearCart();
+                alert('Error: ' + errorMsg + '. Please try again.');
             }
         }
         setLoading(false);
