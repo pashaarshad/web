@@ -16,6 +16,17 @@ export default function RestaurantEarnings() {
     const [period, setPeriod] = useState('week');
     const [loading, setLoading] = useState(false);
 
+    // Calculate scheduled payout date (6 days from now)
+    const getScheduledDate = () => {
+        const date = new Date();
+        date.setDate(date.getDate() + 6);
+        return date.toLocaleDateString('en-IN', {
+            day: 'numeric',
+            month: 'short',
+            year: 'numeric'
+        });
+    };
+
     // Demo earnings data
     const [earnings, setEarnings] = useState({
         today: 2450,
@@ -26,6 +37,7 @@ export default function RestaurantEarnings() {
         lastPayout: 45000,
         lastPayoutDate: '2024-12-20',
         commission: 15,
+        scheduledDate: getScheduledDate()
     });
 
     const [transactions, setTransactions] = useState([
@@ -106,6 +118,17 @@ export default function RestaurantEarnings() {
                 <section className={styles.payoutSection}>
                     <div className={styles.payoutCard}>
                         <h3>💳 Payout Information</h3>
+
+                        {/* Dynamic Schedule Message */}
+                        <div className={styles.scheduleMessage} style={{ marginBottom: '1.5rem', background: 'rgba(0,0,0,0.1)', padding: '1rem', borderRadius: '8px' }}>
+                            <h4 style={{ margin: 0, color: '#fff', fontSize: '1.1rem' }}>
+                                Next Payout: ₹{earnings.pendingPayout.toLocaleString()}
+                            </h4>
+                            <p style={{ margin: '0.5rem 0 0', color: 'rgba(255,255,255,0.8)' }}>
+                                Scheduled to be received on <strong>{earnings.scheduledDate}</strong> (after 6 days)
+                            </p>
+                        </div>
+
                         <div className={styles.payoutDetails}>
                             <div className={styles.payoutItem}>
                                 <span>Commission Rate</span>

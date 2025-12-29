@@ -101,6 +101,7 @@ export const orderAPI = {
     getRestaurantOrders: (params) => api.get('/orders/restaurant/orders', { params }),
     getRestaurantStats: () => api.get('/orders/restaurant/stats'),
     updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
+    verifyPayment: (id, data) => api.post(`/orders/${id}/verify-payment`, data),
 
     // Driver specific
     getDriverOrders: (params) => api.get('/orders/driver/orders', { params }),

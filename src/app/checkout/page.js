@@ -6,6 +6,7 @@ import { FiMapPin, FiCreditCard, FiCheck, FiPlus, FiClock, FiHome, FiBriefcase, 
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { orderAPI, userAPI } from '@/services/api';
+import PaymentQRModal from '@/components/payment/PaymentQRModal';
 import styles from './page.module.css';
 
 // Leaflet Imports (Dynamic import to avoid SSR issues)
@@ -22,6 +23,16 @@ const useMapEvents = dynamic(() => import('react-leaflet').then(mod => mod.useMa
 const defaultCenter = {
     lat: 12.9716,
     lng: 77.5946,
+};
+
+const loadScript = (src) => {
+    return new Promise((resolve) => {
+        const script = document.createElement('script');
+        script.src = src;
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(false);
+        document.body.appendChild(script);
+    });
 };
 
 // Fix Leaflet marker icon issue
@@ -112,6 +123,8 @@ export default function CheckoutPage() {
     const [paymentMethod, setPaymentMethod] = useState('cod');
     const [orderPlaced, setOrderPlaced] = useState(false);
     const [orderId, setOrderId] = useState(null);
+    const [orderDetails, setOrderDetails] = useState(null);
+    const [showPaymentModal, setShowPaymentModal] = useState(false);
 
     // Add Address Modal State
     const [showAddressModal, setShowAddressModal] = useState(false);
@@ -288,12 +301,6 @@ export default function CheckoutPage() {
             return;
         }
 
-        if (paymentMethod !== 'cod') {
-            // Simulate Payment Processing
-            const confirmed = window.confirm('Proceed to Pay ₹' + total + '? (Demo Mode)');
-            if (!confirmed) return;
-        }
-
         setLoading(true);
         try {
             const address = addresses.find(a => a._id === selectedAddress);
@@ -320,18 +327,41 @@ export default function CheckoutPage() {
             const response = await orderAPI.create(orderData);
 
             if (response.data.success) {
-                setOrderId(response.data.data.order._id);
-                setOrderPlaced(true);
-                clearCart();
+                const { order, payment } = response.data.data;
+
+                // Online Payment - Show Custom QR Modal
+                if (paymentMethod === 'online') {
+                    setOrderId(order._id);
+                    setOrderDetails(order);
+                    setShowPaymentModal(true);
+                    setLoading(false);
+                }
+                // COD - Direct Success
+                else {
+                    setOrderId(order._id);
+                    setOrderDetails(order);
+                    setOrderPlaced(true);
+                    clearCart();
+                }
             }
         } catch (error) {
             console.error('Order error:', error);
-            // Fallback for Demo Mode if API fails (e.g. backend issue)
-            setTimeout(() => {
-                setOrderId('demo-' + Date.now().toString().slice(-6));
+            // Fallback - Create demo order and show QR if online
+            const fallbackOrder = {
+                _id: 'demo-' + Date.now().toString().slice(-6),
+                orderNumber: 'FD-' + Date.now().toString().slice(-6),
+                total: total,
+                createdAt: new Date()
+            };
+            setOrderId(fallbackOrder._id);
+            setOrderDetails(fallbackOrder);
+
+            if (paymentMethod === 'online') {
+                setShowPaymentModal(true);
+            } else {
                 setOrderPlaced(true);
                 clearCart();
-            }, 1500);
+            }
         }
         setLoading(false);
     };
@@ -356,7 +386,16 @@ export default function CheckoutPage() {
                         <p>Your order has been confirmed and will be delivered soon.</p>
                         <div className={styles.orderInfo}>
                             <span>Order ID: {orderId}</span>
-                            <span>Estimated Delivery: 30-40 mins</span>
+                            <strong style={{ display: 'block', marginTop: '10px', fontSize: '1.2rem', color: '#27ae60' }}>
+                                Total Paid: ₹{orderDetails?.total || 0}
+                            </strong>
+                            <div style={{ marginTop: '10px', padding: '10px', background: '#f5f5f5', borderRadius: '8px' }}>
+                                <span style={{ display: 'block', color: '#666', fontSize: '0.9rem' }}>Estimated Arrival</span>
+                                <strong style={{ color: '#333' }}>
+                                    {new Date(Date.now() + 6 * 24 * 60 * 60 * 1000).toDateString()}
+                                </strong>
+                                <span style={{ display: 'block', fontSize: '0.8rem', color: '#999' }}>(Receive after 6 days)</span>
+                            </div>
                         </div>
                         <div className={styles.successActions}>
                             <button onClick={() => router.push('/orders')} className={styles.primaryBtn}>
@@ -693,6 +732,23 @@ export default function CheckoutPage() {
                     </div>
                 </>
             )}
+
+            {/* Payment QR Modal */}
+            <PaymentQRModal
+                isOpen={showPaymentModal}
+                onClose={() => setShowPaymentModal(false)}
+                amount={orderDetails?.total || total}
+                orderId={orderId}
+                orderNumber={orderDetails?.orderNumber}
+                onPaymentSuccess={() => {
+                    setShowPaymentModal(false);
+                    setOrderPlaced(true);
+                    clearCart();
+                }}
+                onPaymentTimeout={() => {
+                    // User can try again
+                }}
+            />
         </div>
     );
 }
