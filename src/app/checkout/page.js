@@ -291,8 +291,8 @@ export default function CheckoutPage() {
     };
 
     const subtotal = getCartTotal();
-    const deliveryFee = cart.restaurant?.deliveryFee || 40;
-    const tax = Math.round(subtotal * 0.05);
+    const deliveryFee = 0; // Free delivery for testing
+    const tax = 0; // No tax for testing
     const total = subtotal + deliveryFee + tax;
 
     const handlePlaceOrder = async () => {
