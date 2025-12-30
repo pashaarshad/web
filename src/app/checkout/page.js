@@ -301,9 +301,24 @@ export default function CheckoutPage() {
             return;
         }
 
+        if (!cart.restaurant?._id) {
+            console.error('Restaurant ID missing in cart:', cart);
+            alert('Error: Restaurant information missing. Please clear cart and try again.');
+            return;
+        }
+
         setLoading(true);
 
-        // Create demo order for testing
+        // Validation check for items
+        const validItems = cart.items.every(item => item.menuItem?._id || item._id);
+        if (!validItems) {
+            console.error('Invalid items in cart:', cart.items);
+            alert('Error: Some items in cart are invalid. Please clear cart and add items again.');
+            setLoading(false);
+            return;
+        }
+
+        // Create demo order structure
         const demoOrder = {
             _id: 'order-' + Date.now().toString().slice(-6),
             orderNumber: 'FD-' + Date.now().toString().slice(-6),
@@ -325,12 +340,14 @@ export default function CheckoutPage() {
             const address = addresses.find(a => a._id === selectedAddress);
 
             const orderData = {
-                restaurantId: cart.restaurant?._id,
+                restaurantId: cart.restaurant._id,
                 items: cart.items.map(item => ({
                     menuItemId: item.menuItem?._id || item._id,
                     quantity: item.quantity,
                     customizations: item.customizations || [],
+                    specialInstructions: item.specialInstructions || ''
                 })),
+                amount: total, // Some backends might check this
                 deliveryAddress: {
                     label: address?.label || 'home',
                     street: address?.street || 'Demo Street',
@@ -340,8 +357,12 @@ export default function CheckoutPage() {
                     phone: address?.phone || user?.phone || '',
                     location: address?.location
                 },
+                // If the backend requires deliveryAddressId when using an existing address:
+                deliveryAddressId: address?._id,
                 paymentMethod: paymentMethod,
             };
+
+            console.log('Sending order payload:', JSON.stringify(orderData, null, 2));
 
             const response = await orderAPI.create(orderData);
 
@@ -350,6 +371,7 @@ export default function CheckoutPage() {
 
                 // Online Payment - Use Razorpay Checkout (Auto-Verified)
                 if (paymentMethod === 'online' && payment && payment.razorpayKeyId) {
+                    // ... (Razorpay logic same as before)
                     const res = await loadScript('https://checkout.razorpay.com/v1/checkout.js');
                     if (!res) {
                         alert('Payment gateway failed to load');
@@ -416,10 +438,17 @@ export default function CheckoutPage() {
                 }
             }
         } catch (error) {
-            console.error('Order error:', error);
+            console.error('Order error details:', error.response?.data || error.message);
             const errorMsg = error.response?.data?.message || 'Order failed';
 
-            // Show QR modal for online payment fallback
+            // Only show alert for specific errors, otherwise fallback
+            if (error.response?.status === 400 || error.response?.status === 404) {
+                alert(`Order Failed: ${errorMsg}`);
+                setLoading(false);
+                return; // Do not fallback for validation errors
+            }
+
+            // Show QR modal for online payment fallback (only network errors)
             if (paymentMethod === 'online') {
                 const fallbackOrder = {
                     _id: 'demo-' + Date.now().toString().slice(-6),
@@ -431,7 +460,7 @@ export default function CheckoutPage() {
                 setOrderDetails(fallbackOrder);
                 setShowPaymentModal(true);
             } else {
-                // COD fallback - just show success
+                // COD fallback
                 setOrderId(demoOrder._id);
                 setOrderDetails(demoOrder);
                 setOrderPlaced(true);
