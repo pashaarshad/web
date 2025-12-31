@@ -323,8 +323,40 @@ export default function CheckoutPage() {
             _id: 'order-' + Date.now().toString().slice(-6),
             orderNumber: 'FD-' + Date.now().toString().slice(-6),
             total: total,
-            createdAt: new Date()
+            createdAt: new Date(),
+            status: 'confirmed',
+            items: cart.items,
+            restaurant: cart.restaurant
         };
+
+        // Helper to check if ID is MongoID (24 hex chars)
+        const isMongoId = (id) => /^[0-9a-fA-F]{24}$/.test(id);
+
+        // Check if we are using demo data (non-MongoIDs)
+        const isDemoData = !isMongoId(cart.restaurant._id) ||
+            cart.items.some(item => !isMongoId(item.menuItem?._id || item._id));
+
+        if (isDemoData) {
+            console.log('Detected demo data (invalid MongoIDs), processing as local demo order...');
+
+            // Simulate API delay
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // For Online Payment - Show QR Modal
+            if (paymentMethod === 'online') {
+                setOrderId(demoOrder._id);
+                setOrderDetails(demoOrder);
+                setShowPaymentModal(true);
+            } else {
+                // COD - Success
+                setOrderId(demoOrder._id);
+                setOrderDetails(demoOrder);
+                setOrderPlaced(true);
+                clearCart();
+            }
+            setLoading(false);
+            return;
+        }
 
         // For Online Payment - Show QR Modal immediately
         if (paymentMethod === 'online') {
@@ -335,7 +367,7 @@ export default function CheckoutPage() {
             return;
         }
 
-        // For COD - Try backend first, fallback to demo
+        // For COD - Real Backend Call
         try {
             const address = addresses.find(a => a._id === selectedAddress);
 
@@ -347,7 +379,7 @@ export default function CheckoutPage() {
                     customizations: item.customizations || [],
                     specialInstructions: item.specialInstructions || ''
                 })),
-                amount: total, // Some backends might check this
+                amount: total,
                 deliveryAddress: {
                     label: address?.label || 'home',
                     street: address?.street || 'Demo Street',
@@ -357,7 +389,6 @@ export default function CheckoutPage() {
                     phone: address?.phone || user?.phone || '',
                     location: address?.location
                 },
-                // If the backend requires deliveryAddressId when using an existing address:
                 deliveryAddressId: address?._id,
                 paymentMethod: paymentMethod,
             };
@@ -438,34 +469,24 @@ export default function CheckoutPage() {
                 }
             }
         } catch (error) {
-            console.error('Order error details:', error.response?.data || error.message);
-            const errorMsg = error.response?.data?.message || 'Order failed';
+            console.error('Order error full object:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+            console.error('Order error response:', error.response);
 
-            // Only show alert for specific errors, otherwise fallback
+            const errorMsg = error.response?.data?.message || error.message || 'Order failed';
+
+            // Only show alert for specific errors
             if (error.response?.status === 400 || error.response?.status === 404) {
                 alert(`Order Failed: ${errorMsg}`);
                 setLoading(false);
-                return; // Do not fallback for validation errors
+                return;
             }
 
-            // Show QR modal for online payment fallback (only network errors)
-            if (paymentMethod === 'online') {
-                const fallbackOrder = {
-                    _id: 'demo-' + Date.now().toString().slice(-6),
-                    orderNumber: 'FD-' + Date.now().toString().slice(-6),
-                    total: total,
-                    createdAt: new Date()
-                };
-                setOrderId(fallbackOrder._id);
-                setOrderDetails(fallbackOrder);
-                setShowPaymentModal(true);
-            } else {
-                // COD fallback
-                setOrderId(demoOrder._id);
-                setOrderDetails(demoOrder);
-                setOrderPlaced(true);
-                clearCart();
-            }
+            // Fallback for network errors or other issues
+            console.warn('Network error or server unavailable, using fallback demo order.');
+            setOrderId(demoOrder._id);
+            setOrderDetails(demoOrder);
+            setOrderPlaced(true);
+            clearCart();
         }
         setLoading(false);
     };

@@ -1,0 +1,232 @@
+.page {
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    padding: 2rem;
+    padding-bottom: 80px;
+    /* For mobile nav */
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 1.8rem;
+    color: #333;
+}
+
+.header p {
+    margin: 0.5rem 0 0;
+    color: #666;
+}
+
+.refreshBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.8rem 1.2rem;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.2s;
+}
+
+.refreshBtn:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+}
+
+.loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #ff4757;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.emptyState {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.emptyIcon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.emptyState h2 {
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+/* Orders Grid */
+.ordersGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 1.5rem;
+}
+
+.orderCard {
+    background: white;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    border: 1px solid #eee;
+}
+
+.orderCard:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.cardHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.orderId {
+    font-weight: 600;
+    color: #333;
+    background: #f5f5f5;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.9rem;
+}
+
+.earnings {
+    font-weight: 700;
+    color: #27ae60;
+    font-size: 1.1rem;
+}
+
+.routeInfo {
+    position: relative;
+    padding-left: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.routeLine {
+    position: absolute;
+    left: 23px;
+    top: 30px;
+    bottom: 30px;
+    width: 2px;
+    background: #eee;
+    z-index: 0;
+}
+
+.routePoint {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 1.5rem;
+}
+
+.routePoint:last-child {
+    margin-bottom: 0;
+}
+
+.pointIcon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+
+.routePoint h4 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.routePoint p {
+    margin: 4px 0 0;
+    font-size: 0.85rem;
+    color: #666;
+    line-height: 1.4;
+}
+
+.orderDetails {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    background: #f8f9fa;
+    padding: 0.8rem;
+    border-radius: 8px;
+}
+
+.detailItem {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.9rem;
+    color: #555;
+    font-weight: 500;
+}
+
+.acceptBtn {
+    width: 100%;
+    padding: 1rem;
+    background: #ff4757;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.acceptBtn:hover {
+    background: #ff3344;
+}
+
+@media (max-width: 768px) {
+    .page {
+        padding: 1rem;
+        padding-bottom: 80px;
+    }
+
+    .ordersGrid {
+        grid-template-columns: 1fr;
+    }
+}

@@ -96,6 +96,9 @@ export default function Home() {
                   className={styles.searchInput}
                 />
               </div>
+              <Link href="/restaurants" className={styles.orderNowBtn}>
+                Order Now
+              </Link>
             </div>
           </div>
 
